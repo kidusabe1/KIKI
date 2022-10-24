@@ -1,6 +1,6 @@
-from cProfile import run
-from re import I
-from tabnanny import check
+#from cProfile import run
+#from re import I
+#from tabnanny import check
 import tkinter
 from PIL import ImageTk, Image
 import speech_recognition as sr
@@ -35,7 +35,7 @@ deactivate_image=Image.open("Deactivate.png")
 activate_image=Image.open("Activate.png")
 result_image=Image.open("result.png")
 
-#setting up the voice recognizer and storere
+#setting up the voice recognizer and storer
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 rate = engine.getProperty('rate')
@@ -52,20 +52,6 @@ def talk(text):
     engine.runAndWait()
 
 # listen to command
-def take_command2():
-    global command
-    try:
-        with sr.Microphone() as source:
-            voice = listener.listen(source)
-            command = listener.recognize_google(voice)
-            command = command.lower()
-            # optional
-            if 'kiki' in command:
-                command = command.replace('kiki', '')
-                print(command)
-    except:
-        pass
-    return command
 def take_command():
     global listen
     global j
@@ -106,6 +92,7 @@ def run_alexa():
     command_label.destroy()
     listening_label.destroy()
     i=1
+    # Run_alex_2 is so that we avoid saying the same starting message again
     def run_alexa_2():
         global i
         global run_again_button
@@ -234,11 +221,7 @@ def run_alexa():
                 talk("I didn't get that, try again please.")
                 run_alexa()
                 pass
-        elif 'search' in command: #who is / what is
-            #global result_image
-            #run_again_button=tkinter.Button(main_window,text="Go back",font=("Poppins",12,"bold"),
-            #                width=10,bg="#F9D8D6",border=0,activebackground="#F9D8D6")
-            #run_again_button.grid(row=5,column=0,padx=(0,10),pady=(30,10),ipadx=0,ipady=0)
+        elif 'search' in command: 
             button_frame.destroy()
             result_image=Image.open("result.png")
             result_image=result_image.resize((100,100),Image.ANTIALIAS)
@@ -247,12 +230,7 @@ def run_alexa():
                                     border=0,activebackground="white")
             result_button.grid(row=4,column=0,padx=(42,0),ipadx=0,ipady=0,pady=(15,0),sticky="NEWS")
             person = command.replace('search', '')
-            person=command.replace('who','')
-            person=command.replace('what','')
-            #activate_label=tkinter.Label(main_window,text=person,font=("Poppins",16,"bold"),bg="white")
-            #activate_label.grid(row=5,column=0,padx=(32,0),ipadx=0,ipady=0,sticky="w")
             info = wikipedia.summary(person, 1)
-            
             print(info) #optional
             talk(info)
             command_label.destroy()
@@ -892,15 +870,6 @@ def run_alexa():
             run_alexa_2()
     j==0
 
-def run_alexa_in_a_loop():
-    while(True):
-        if i!=2:
-            start_time=threading.Timer(0.1,run_alexa)
-            start_time.start()
-        else:
-            talk('Okay bye. see you again. take care.')
-            break
-            
 def create_deactivate_button():
     global listen
     global active_flag
@@ -920,23 +889,8 @@ def create_deactivate_button():
             start_time=threading.Timer(0.1,run_alexa)
             start_time.start()
     listen+=1
-def hey_kiki():
-    global instruction_message_label
-    global j
-    global activate_button
-    global activate_label
-    j=5
-    command=take_command()
-    if 'hey' or 'kiki' in command:
-        activate_button.destroy()
-        activate_label.destroy()
-        instruction_message_label.destroy()
-        create_deactivate_button()
-    else:
-        pass
 
-def create_activate_button():
-    global command
+def create_activate_button():    
     global active_flag
     active_flag=0
     global instruction_message_label
@@ -944,10 +898,7 @@ def create_activate_button():
     instruction_message_label=tkinter.Label(main_window,text="Activate or say 'Hey kiki'...",
                             font=("Poppins",13,"bold"),bg="white")
     instruction_message_label.grid(row=3,column=0,padx=32,pady=(20,0),sticky="W",ipadx=0,ipady=0)
-    
-    #start_time1=threading.Timer(0.1,hey_kiki)
-    #start_time1.start()
-    
+
     global activate_image
     activate_image=Image.open("Activate.png")
     activate_image=activate_image.resize((70,80),Image.ANTIALIAS)
@@ -958,16 +909,7 @@ def create_activate_button():
     activate_button.grid(row=5,column=0,padx=(42,0),pady=(120,0),ipadx=0,ipady=0,sticky="WS")
     activate_label=tkinter.Label(main_window,text="Activate",font=("Poppins",16,"bold"),bg="white")
     activate_label.grid(row=6,column=0,padx=(32,0),pady=(2,0),ipadx=0,ipady=0,sticky="w")
-
-
-
-
-
-
-
-
-
-
+    
 avatar=Image.open("avatar.png")
 resized_avatar=avatar.resize((80,80),Image.ANTIALIAS)
 resized_avatar=ImageTk.PhotoImage(resized_avatar)
@@ -980,8 +922,6 @@ welcome_label.grid(row=1,column=0,padx=32,sticky="W",ipadx=0,ipady=0)
 user_name_label=tkinter.Label(main_window,text="Bemnet",font=("Poppins",20,"bold"),bg="white")
 user_name_label.grid(row=2,column=0,padx=32,sticky="W",ipadx=0,ipady=0)
 
-
 create_activate_button()
 main_window.mainloop()
-
 
